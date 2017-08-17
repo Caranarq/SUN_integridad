@@ -6,12 +6,14 @@ para cada ciudad en el dataset, verifica que existan registros para todos los mu
 
 El algoritmo espera las siguientes entradas:
 
-dataframe_sun:  dataframe con claves sun y claves mun, creado con la funcion "asignar_sun" disponible en https://github.com/Caranarq/SUN
+`dataframe_sun`:  dataframe con claves sun y claves mun, creado con la funcion "asignar_sun" disponible en https://github.com/Caranarq/SUN
 
-##-------------------------------------------------
 
-Plataforma de Conocimiento de Ciudades Sustentables 
+----------
+
+
+**Plataforma de Conocimiento de Ciudades Sustentables 
 
 Instituto Nacional de Ecologia y Cambio Climatico
 
-Programa de las Naciones Unidas para el Desarrollo.
+Programa de las Naciones Unidas para el Desarrollo**
