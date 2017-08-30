@@ -17,7 +17,6 @@ dataframe_sun:  dataframe con claves sun y claves mun, creado con
 '''
 
 import pandas as pd
-import numpy as np
 module_path = r'D:\PCCS\01_Analysis\01_DataAnalysis\00_Parametros\scripts\SUN'
 import sys
 if module_path not in sys.path:
@@ -41,10 +40,12 @@ def SUN_integridad(dataframe_sun):
     dataframe_sun = dataframe_sun.set_index(['CVE_SUN'])
     unicos_df = dataframe_sun['CVE_MUN'].unique()
 
-    # Checar que municipios del dataset se encuentran en el catalogo SUN y cuales faltam
-    sun['check'] = sun['CVE_MUN'].isin(unicos_df)
+    # Calculo de integridad
+    sun['CHECK'] = sun['CVE_MUN'].isin(unicos_df)
+    sun = pd.merge(sun, dataframe_sun[['VAR_INTEGRIDAD', 'CVE_MUN']], on='CVE_MUN')
     cantmun = sun.groupby(by = 'CVE_SUN').agg('count')['CVE_MUN']           # Total en el SUN
-    cantdf = sun.groupby(by = 'CVE_SUN').agg('sum')['check']                # Total en el dataframe
+    cantdf = sun.groupby(by = 'CVE_SUN').agg('sum')['CHECK']                # Total en el dataframe
+    varint = sun.groupby(by = 'CVE_SUN').agg('mean')['VAR_INTEGRIDAD'] # Promedio de la Variable de Integridad
 
     # Armar dataframe de integridad
     sun_index = sun.set_index('CVE_SUN')
@@ -56,10 +57,10 @@ def SUN_integridad(dataframe_sun):
     integridad['SUBSISTEMA'] = sun_subsis
     integridad['CANTMUN'] = cantmun.astype(float)
     integridad['CANTDF'] = cantdf
-    integridad['COMPLETION'] = cantdf/cantmun
+    integridad['INTEGRIDAD'] = varint
 
     # Datasets de integridad
-    existencia = ['CVE_SUN', 'CVE_ENT', 'CVE_MUN', 'NOM_MUN', 'SUBSIS_PPAL', 'check']
+    existencia = ['CVE_SUN', 'CVE_ENT', 'CVE_MUN', 'NOM_MUN', 'SUBSIS_PPAL', 'CHECK']
     existencia = sun[existencia]
     existencia = existencia.set_index(['CVE_SUN'])
     rev_integridad = {'INTEGRIDAD' : integridad,
@@ -67,7 +68,7 @@ def SUN_integridad(dataframe_sun):
 
     return rev_integridad
 
-
+dataframe_sun = denuncias_std
 '''
     pd.merge(integridad, sun['CVE_SUN'])
 
@@ -179,4 +180,5 @@ repes.to_csv('SUN_Repeats.csv')
 
 import os; os.getcwd()
 '''
+
 
