@@ -43,9 +43,10 @@ def SUN_integridad(dataframe_sun):
     # Calculo de integridad
     sun['CHECK'] = sun['CVE_MUN'].isin(unicos_df)
     sun = pd.merge(sun, dataframe_sun[['VAR_INTEGRIDAD', 'CVE_MUN']], on='CVE_MUN')
+    sun['VAR_INTEGRIDAD'] = sun['VAR_INTEGRIDAD'].fillna(0)
     cantmun = sun.groupby(by = 'CVE_SUN').agg('count')['CVE_MUN']           # Total en el SUN
     cantdf = sun.groupby(by = 'CVE_SUN').agg('sum')['CHECK']                # Total en el dataframe
-    varint = sun.groupby(by = 'CVE_SUN').agg('mean')['VAR_INTEGRIDAD'] # Promedio de la Variable de Integridad
+    varint = sun.groupby(by = 'CVE_SUN').agg('mean')['VAR_INTEGRIDAD']      # Promedio de la Variable de Integridad
 
     # Armar dataframe de integridad
     sun_index = sun.set_index('CVE_SUN')
@@ -60,16 +61,16 @@ def SUN_integridad(dataframe_sun):
     integridad['INTEGRIDAD'] = varint
 
     # Datasets de integridad
-    existencia = ['CVE_SUN', 'CVE_ENT', 'CVE_MUN', 'NOM_MUN', 'SUBSIS_PPAL', 'CHECK']
+    existencia = ['CVE_SUN', 'CVE_ENT', 'CVE_MUN', 'NOM_MUN', 'SUBSIS_PPAL', 'CHECK', 'VAR_INTEGRIDAD']
     existencia = sun[existencia]
     existencia = existencia.set_index(['CVE_SUN'])
     rev_integridad = {'INTEGRIDAD' : integridad,
                       'EXISTENCIA' : existencia}
 
     return rev_integridad
-
-dataframe_sun = denuncias_std
 '''
+dataframe_sun = denuncias_std
+
     pd.merge(integridad, sun['CVE_SUN'])
 
     sun['CVE_MUN'].isin(munendf)
